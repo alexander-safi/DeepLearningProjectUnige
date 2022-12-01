@@ -4,6 +4,7 @@ from miniProject1Modules import CNN, BCMLP, MLP, AuxMLP
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import csv
 
 def init_weights(m):
     """
@@ -141,28 +142,36 @@ def predict_output(sample, target, trained_model1, trained_model2, trained_bcmlp
         return False
     
 
+#We write the results in the file 'output.txt'
+
+with open('output.txt', 'w') as f:
+    writer = csv.writer(f)
+    #We write the columns
+    f.write('Model,WeightSharing,AuxLoss,RunNb,Score\n')
+    #Loop over the two architectures
+    for chosen_model in ['cnn', 'mlp']:
+        #Loop over the two possibilities for weight sharing : with and without
+        for weight_sharing_active in [True, False]:
+            #Loop over the two possibilities for auxiliary loss : with or without
+            for aux_loss_active in [True, False]:
+
+                for k in range(10):
+
+                    trained_model1, trained_model2, trained_bcmlp, trained_aux = train_model(model = chosen_model,weight_sharing = weight_sharing_active, aux_loss = aux_loss_active, num_epochs = 1)
+
+                    train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
+
+                    if(chosen_model == 'cnn'):
+                        test_input = test_input.view(-1,2, 1,14,14).float()
+                    n_correct = 0
+                    n_false = 0
+                    for j in range(len(test_input)):
+                        if(predict_output(test_input[j], test_target[j], trained_model1, trained_model2, trained_bcmlp, trained_aux)):
+                            n_correct += 1
+                        else:
+                            n_false += 1
 
 
-for k in range(10):
-    chosen_model = "cnn"
-    weight_sharing_active = False
-    aux_loss_active = True
-
-
-    trained_model1, trained_model2, trained_bcmlp, trained_aux = train_model(model = chosen_model,weight_sharing = weight_sharing_active, aux_loss = aux_loss_active, num_epochs = 25)
-
-    train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
-
-    if(chosen_model == 'cnn'):
-        test_input = test_input.view(-1,2, 1,14,14).float()
-    n_correct = 0
-    n_false = 0
-    for j in range(len(test_input)):
-        if(predict_output(test_input[j], test_target[j], trained_model1, trained_model2, trained_bcmlp, trained_aux)):
-            n_correct += 1
-        else:
-            n_false += 1
-
-
-
-    print(str(100*n_correct/(n_correct+n_false)) + '% of correct answers', k, 'th run')
+                    score = n_correct/(n_correct+n_false)
+                    print(str(100*n_correct/(n_correct+n_false)) + '% of correct answers', k+1, 'th run')
+                    writer.writerow([chosen_model,str(weight_sharing_active),str(aux_loss_active),str(k),str(score)])
