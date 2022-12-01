@@ -157,7 +157,7 @@ with open('output.txt', 'w') as f:
 
                 for k in range(10):
 
-                    trained_model1, trained_model2, trained_bcmlp, trained_aux = train_model(model = chosen_model,weight_sharing = weight_sharing_active, aux_loss = aux_loss_active, num_epochs = 1)
+                    trained_model1, trained_model2, trained_bcmlp, trained_aux = train_model(model = chosen_model,weight_sharing = weight_sharing_active, aux_loss = aux_loss_active, num_epochs = 25)
 
                     train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
 
