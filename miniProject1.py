@@ -6,22 +6,15 @@ import torch.nn as nn
 import torch.optim as optim
 import csv
 
-def init_weights(m):
-    """
-    This function is used to randomly initialize the weights of the CNNs and the MLPS.
-    Fully connected layer's weights are filled with random uniform values between 0 and 0.1 and conv2 weights are filled with random normal
-    values of mean 0 and std 0.01
-    """
-    if isinstance(m, nn.Linear):
-        torch.nn.init.normal_(m.weight, std = 0.01)
-        m.bias.data.normal_(mean = 0, std = 0.01)
-    elif isinstance(m, nn.Conv2d):
-        torch.nn.init.normal_(m.weight, std = 0.01)
 
-def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epochs = 25):
+
+def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epochs = 25, mini_batch_size = 50):
 
     train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
-
+    #We create an random shuffling of indices 
+    rand_indices = torch.randperm(1000)
+    #and randomize the train set
+    train_input, train_target, train_classes = train_input[rand_indices], train_target[rand_indices], train_classes[rand_indices]
     bcmlp = BCMLP()
     #bcmlp.apply(init_weights)
     if(model == 'cnn'):
@@ -76,18 +69,20 @@ def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epoc
     for epoch in range(num_epochs):  # loop over the dataset multiple times
 
         running_loss = 0.0
-        for i in torch.randperm(len(train_input)):
+        #We randomize the order of the train input at each epoch
+        #train_input = torch.randperm(len(train_input))
+        for i in range(0, train_input.size(0), mini_batch_size):
 
             # zero the parameter gradients
             optimizer.zero_grad()
 
             # we pass the 2 images through the forwad, which results in two tensors of size 16
             if(weight_sharing):
-                x1 = main_model.forward(train_input[i,0])
-                x2 = main_model.forward(train_input[i,1])
+                x1 = main_model.forward(train_input[:,0].narrow(0, i, mini_batch_size))
+                x2 = main_model.forward(train_input[:,1].narrow(0, i, mini_batch_size))
             elif(not weight_sharing):
-                x1 = model_1.forward(train_input[i,0])
-                x2 = model_2.forward(train_input[i,1])
+                x1 = model_1.forward(train_input[:,0].narrow(0, i, mini_batch_size))
+                x2 = model_2.forward(train_input[:,1].narrow(0, i, mini_batch_size))
             
             if(aux_loss):
                 #We pass the images through an auxiliary MLP to compute the auxiliary loss
@@ -97,13 +92,13 @@ def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epoc
             #We concatenate the two tensors x1 and x2 to pass them through the final MLP 
             concat_data = torch.concat((x1,x2), 1)
             #This mlp reduces the data to a tensor of size 1, that is then passed through a sigmoid
-            output = bcmlp(concat_data)[0][0]#.to(torch.float32)
+            output = bcmlp.forward(concat_data).view(-1)#.to(torch.float32)
             #we compute the loss with the binary classifier
-            loss = criterion(output, train_target[i].to(torch.float32))
+            loss = criterion(output, train_target.narrow(0, i, mini_batch_size).to(torch.float32))
 
             if(aux_loss):
-                loss2 = aux_criterion(aux_x1, train_classes[i,0])
-                loss3 = aux_criterion(aux_x2, train_classes[i,1])
+                loss2 = aux_criterion(aux_x1, train_classes[:,0].narrow(0, i, mini_batch_size).view(-1))
+                loss3 = aux_criterion(aux_x2, train_classes[:,1].narrow(0, i, mini_batch_size).view(-1))
                 loss +=   lambda_aux*(loss2 + loss3)
             loss.backward()
             optimizer.step()
