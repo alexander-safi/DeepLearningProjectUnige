@@ -1,5 +1,4 @@
 from dlc_practical_prologue import generate_pair_sets
-from matplotlib import pyplot as plt
 from miniProject1Modules import CNN, BCMLP, MLP, AuxMLP
 import torch
 import torch.nn as nn
@@ -8,7 +7,7 @@ import csv
 
 
 
-def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epochs = 25, mini_batch_size = 50):
+def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epochs = 25, mini_batch_size = 25):
 
     train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
     #We create an random shuffling of indices 
@@ -70,7 +69,6 @@ def train_model(model = "cnn",weight_sharing = False, aux_loss = False, num_epoc
 
         running_loss = 0.0
         #We randomize the order of the train input at each epoch
-        #train_input = torch.randperm(len(train_input))
         for i in range(0, train_input.size(0), mini_batch_size):
 
             # zero the parameter gradients

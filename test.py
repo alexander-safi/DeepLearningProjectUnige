@@ -47,16 +47,30 @@ for i in range(150):
         #and we update all the weights
         network.update_weights()
     if(i%10 == 0):
-        print('iter ',i,' loss : ',running_loss)
+        print('iter ',i,' loss : ',running_loss.item())
 
 #We check the accuracy of our trained model
 correct = 0
+
 for i in range(len(test_set)):
     result = network(test_set[i])
+    result_train = network(train_set[i])
     if(result.item() > 0.5 and test_label[i] == 1):
         correct += 1
     elif(result.item() <= 0.5 and test_label[i] == 0):
         correct += 1
     else:
         pass
-print('Accuracy : ' ,100*correct/len(test_set), "%")
+print('Accuracy on test set: ' ,100*correct/len(test_set), "%")
+
+#we do the same for the train set
+correct_train = 0
+for i in range(len(train_set)):
+    result_train = network(train_set[i])
+    if(result_train.item() > 0.5 and train_label[i] == 1):
+        correct_train += 1
+    elif(result_train.item() <= 0.5 and train_label[i] == 0):
+        correct_train += 1
+    else:
+        pass
+print('Accuracy on train set: ' ,100*correct_train/len(train_set), "%")
