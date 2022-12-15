@@ -1,0 +1,149 @@
+Model,WeightSharing,AuxLoss,RunNb,Score
+
+cnn,True,True,0,0.831
+cnn,True,True,1,0.838
+cnn,True,True,2,0.825
+cnn,True,True,3,0.797
+cnn,True,True,4,0.858
+cnn,True,True,5,0.835
+cnn,True,True,6,0.801
+cnn,True,True,7,0.832
+cnn,True,True,8,0.807
+cnn,True,True,9,0.794
+
+
+cnn,True,False,0,0.815
+cnn,True,False,1,0.808
+cnn,True,False,2,0.791
+cnn,True,False,3,0.844
+cnn,True,False,4,0.83
+cnn,True,False,5,0.802
+cnn,True,False,6,0.777
+cnn,True,False,7,0.809
+cnn,True,False,8,0.821
+cnn,True,False,9,0.825
+
+
+
+cnn,False,True,0,0.825
+cnn,False,True,1,0.779
+cnn,False,True,2,0.806
+cnn,False,True,3,0.779
+cnn,False,True,4,0.789
+cnn,False,True,5,0.803
+cnn,False,True,6,0.788
+cnn,False,True,7,0.819
+cnn,False,True,8,0.766
+cnn,False,True,9,0.784
+
+
+cnn,False,False,0,0.785
+cnn,False,False,1,0.78
+cnn,False,False,2,0.811
+cnn,False,False,3,0.768
+cnn,False,False,4,0.782
+cnn,False,False,5,0.789
+cnn,False,False,6,0.801
+cnn,False,False,7,0.814
+cnn,False,False,8,0.809
+cnn,False,False,9,0.776
+
+CNN Overall
+Avg: 0.804825   sd: 0.02200
+
+CNN Weight sharing True
+Avg: 0.817      sd: 0.0198
+
+CNN Weight sharing False
+Avg:0.7926      sd:0.01670
+
+
+CNN AuxLoss True
+Avg:0.8078      sd:0.02357
+
+CNN AuxLoss False
+Avg:0.8019      sd:0.01985
+
+CNN Weight Sharing and AuxLoss True
+Avg:0.8218      sd:0.019963
+
+CNN Weight Sharing and AuxLoss False
+Avg:0.7915      sd: 0.01531
+
+
+
+mlp,True,True,0,0.822
+mlp,True,True,1,0.797
+mlp,True,True,2,0.849
+mlp,True,True,3,0.828
+mlp,True,True,4,0.841
+mlp,True,True,5,0.817
+mlp,True,True,6,0.809
+mlp,True,True,7,0.831
+mlp,True,True,8,0.819
+mlp,True,True,9,0.819
+
+
+mlp,True,False,0,0.797
+mlp,True,False,1,0.785
+mlp,True,False,2,0.793
+mlp,True,False,3,0.813
+mlp,True,False,4,0.81
+mlp,True,False,5,0.801
+mlp,True,False,6,0.796
+mlp,True,False,7,0.786
+mlp,True,False,8,0.802
+mlp,True,False,9,0.794
+
+
+mlp,False,True,0,0.804
+mlp,False,True,1,0.789
+mlp,False,True,2,0.794
+mlp,False,True,3,0.792
+mlp,False,True,4,0.796
+mlp,False,True,5,0.779
+mlp,False,True,6,0.796
+mlp,False,True,7,0.802
+mlp,False,True,8,0.814
+mlp,False,True,9,0.812
+
+
+mlp,False,False,0,0.758
+mlp,False,False,1,0.767
+mlp,False,False,2,0.789
+mlp,False,False,3,0.794
+mlp,False,False,4,0.732
+mlp,False,False,5,0.802
+mlp,False,False,6,0.789
+mlp,False,False,7,0.789
+mlp,False,False,8,0.771
+mlp,False,False,9,0.786
+
+
+MLP Overall
+Avg: 0.7991  sd: 0.02130
+
+Weight Sharing True
+Avg: 0.81045 sd: 0.01736
+
+Weight Sharing False
+Avg: 0.78775 sd: 0.01866
+
+
+AuxLoss True
+Avg: 0.8105  sd: 0.01769
+
+
+AuxLoss False
+Avg: 0.7877  sd: 0.01829
+
+
+Weight Sharing and AuxLoss True
+Avg: 0.8232   sd: 0.01424
+
+
+Weight Sharing and AuxLoss False
+Avg: 0.7777   sd: 0.01985
+
+
+
